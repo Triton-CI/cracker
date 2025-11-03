@@ -150,7 +150,6 @@ services:
       - -c
       - |  
         echo '🚦 Stopping container function...'
-        #docker stop cracker-start-function-for-local-testing-1
         docker stop $(docker ps -q --filter "label=com.docker.compose.service=start-function-for-local-testing")
 
     depends_on:

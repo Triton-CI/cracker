@@ -82,6 +82,8 @@ services:
 
   # Deploy the function (locally) for testing
   start-function-for-local-testing:
+    labels:
+      com.docker.compose.service: start-function-for-local-testing
     image: ubuntu:22.04
     environment:
       TARGETOS: ${TARGETOS:-linux}
@@ -147,8 +149,8 @@ services:
       - /bin/sh
       - -c
       - |  
-        echo '🚦 Stopping container named cracker-start-function-for-local-testing-1...'
-        docker stop cracker-start-function-for-local-testing-1
+        echo '🚦 Stopping container function...'
+        docker stop $(docker ps -q --filter "label=com.docker.compose.service=start-function-for-local-testing")
       
     depends_on:
       test-local-endpoint:
