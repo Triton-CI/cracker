@@ -1,0 +1,109 @@
+
+
+## Overview
+
+                    │               Analyzed Image                
+────────────────────┼─────────────────────────────────────────────
+  Target            │  hello-wasm-function:demo                   
+    digest          │  0af14ddad942                               
+    platform        │ linux/arm64                                 
+    provenance      │ git@github.com:compose-ci/cracker.git       
+                    │  https://github.com/compose-ci/cracker/blob/91d6a94a3f7bb9e0751c1ba7056b1fd5ce912557   
+    vulnerabilities │    1C     3H    10M     1L                  
+    size            │ 4.1 MB                                      
+    packages        │ 10                                          
+
+
+## Packages and Vulnerabilities
+
+   1C     3H    10M     1L  stdlib 1.24.0
+pkg:golang/stdlib@1.24.0
+
+    ✗ CRITICAL CVE-2025-22871
+      https://scout.docker.com/v/CVE-2025-22871?s=golang&n=stdlib&t=golang&vr=%3E%3D1.24.0-0%2C%3C1.24.2
+      Affected range : >=1.24.0-0  
+                     : <1.24.2     
+      Fixed version  : 1.24.2      
+    
+    ✗ HIGH CVE-2025-61725
+      https://scout.docker.com/v/CVE-2025-61725?s=golang&n=stdlib&t=golang&vr=%3C1.24.8
+      Affected range : <1.24.8  
+      Fixed version  : 1.24.8   
+    
+    ✗ HIGH CVE-2025-58188
+      https://scout.docker.com/v/CVE-2025-58188?s=golang&n=stdlib&t=golang&vr=%3C1.24.8
+      Affected range : <1.24.8  
+      Fixed version  : 1.24.8   
+    
+    ✗ HIGH CVE-2025-22874
+      https://scout.docker.com/v/CVE-2025-22874?s=golang&n=stdlib&t=golang&vr=%3E%3D1.24.0-0%2C%3C1.24.4
+      Affected range : >=1.24.0-0  
+                     : <1.24.4     
+      Fixed version  : 1.24.4      
+    
+    ✗ MEDIUM CVE-2025-4673
+      https://scout.docker.com/v/CVE-2025-4673?s=golang&n=stdlib&t=golang&vr=%3E%3D1.24.0-0%2C%3C1.24.4
+      Affected range : >=1.24.0-0  
+                     : <1.24.4     
+      Fixed version  : 1.24.4      
+    
+    ✗ MEDIUM CVE-2025-61723
+      https://scout.docker.com/v/CVE-2025-61723?s=golang&n=stdlib&t=golang&vr=%3C1.24.8
+      Affected range : <1.24.8  
+      Fixed version  : 1.24.8   
+    
+    ✗ MEDIUM CVE-2025-58187
+      https://scout.docker.com/v/CVE-2025-58187?s=golang&n=stdlib&t=golang&vr=%3C1.24.9
+      Affected range : <1.24.9  
+      Fixed version  : 1.24.9   
+    
+    ✗ MEDIUM CVE-2025-47906
+      https://scout.docker.com/v/CVE-2025-47906?s=golang&n=stdlib&t=golang&vr=%3E%3D1.24.0%2C%3C1.24.6
+      Affected range : >=1.24.0  
+                     : <1.24.6   
+      Fixed version  : 1.24.6    
+    
+    ✗ MEDIUM CVE-2025-0913
+      https://scout.docker.com/v/CVE-2025-0913?s=golang&n=stdlib&t=golang&vr=%3E%3D1.24.0-0%2C%3C1.24.4
+      Affected range : >=1.24.0-0  
+                     : <1.24.4     
+      Fixed version  : 1.24.4      
+    
+    ✗ MEDIUM CVE-2025-61724
+      https://scout.docker.com/v/CVE-2025-61724?s=golang&n=stdlib&t=golang&vr=%3C1.24.8
+      Affected range : <1.24.8  
+      Fixed version  : 1.24.8   
+    
+    ✗ MEDIUM CVE-2025-58189
+      https://scout.docker.com/v/CVE-2025-58189?s=golang&n=stdlib&t=golang&vr=%3C1.24.8
+      Affected range : <1.24.8  
+      Fixed version  : 1.24.8   
+    
+    ✗ MEDIUM CVE-2025-58186
+      https://scout.docker.com/v/CVE-2025-58186?s=golang&n=stdlib&t=golang&vr=%3C1.24.8
+      Affected range : <1.24.8  
+      Fixed version  : 1.24.8   
+    
+    ✗ MEDIUM CVE-2025-58185
+      https://scout.docker.com/v/CVE-2025-58185?s=golang&n=stdlib&t=golang&vr=%3C1.24.8
+      Affected range : <1.24.8  
+      Fixed version  : 1.24.8   
+    
+    ✗ MEDIUM CVE-2025-47912
+      https://scout.docker.com/v/CVE-2025-47912?s=golang&n=stdlib&t=golang&vr=%3C1.24.8
+      Affected range : <1.24.8  
+      Fixed version  : 1.24.8   
+    
+    ✗ LOW CVE-2025-58183
+      https://scout.docker.com/v/CVE-2025-58183?s=golang&n=stdlib&t=golang&vr=%3C1.24.8
+      Affected range : <1.24.8  
+      Fixed version  : 1.24.8   
+    
+
+
+15 vulnerabilities found in 1 package
+  CRITICAL  1   
+  HIGH      3   
+  MEDIUM    10  
+  LOW       1   
+

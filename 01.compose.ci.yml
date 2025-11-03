@@ -1,0 +1,57 @@
+# Compose CI pipeline
+x-documentation: >
+  # Compose CI:
+
+  ## Requirements
+
+  ## Start the CI pipeline
+
+  ```bash
+  docker compose -f 01.compose.ci.yml up --build
+  ```
+  > you can even use the watch mode to test and debug your CI pipeline.
+
+  ## About variable interpolation
+
+  - https://docs.docker.com/reference/compose-file/interpolation/
+
+x-common-variables: &common-variables
+  # Define global variables for the CI pipeline  
+  GLOBAL_WASM_BUILD_MESSAGE: "☂️ Building Go wasm plugins"
+
+
+services:
+
+  # Build the wasm file using tinygo
+  build-wasm-go-plugin:
+    image: tinygo/tinygo:0.39.0
+    environment:
+      <<: *common-variables
+      LOCAL_WASM_BUILD_MESSAGE: "🟣 Building the say_hello wasm plugin"
+
+    command: 
+    # ${ABOUT} and ${AUTHOR} are defined into the .env file
+    # they are automatically picked up by docker compose
+    # $${GLOBAL_WASM_BUILD_MESSAGE} is defined in the common variables section
+      - /bin/sh
+      - -c
+      - |  
+        go version
+        tinygo version
+        # Use double $$ to escape $ in docker compose command
+        echo "$${GLOBAL_WASM_BUILD_MESSAGE}"
+        echo "$${LOCAL_WASM_BUILD_MESSAGE}"
+        echo "✋ about: ${ABOUT}, by ${AUTHOR}"
+        cd /go-plugin
+        go mod download
+        tinygo build \
+          -scheduler=none \
+          --no-debug \
+          -o /build/plugin.wasm \
+          -target wasi main.go
+        echo "📦 plugin.wasm built at /build/plugin.wasm"
+      
+    volumes:
+      - ./plugins/go-plugin:/go-plugin
+      - ./build:/build
+

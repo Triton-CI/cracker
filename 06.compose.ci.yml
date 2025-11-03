@@ -1,0 +1,211 @@
+# Compose CI pipeline
+x-documentation: >
+  # Compose CI:
+
+  ## Requirements
+
+  ## Start the CI pipeline
+
+  ```bash
+  docker compose -f 06.compose.ci.yml up --build
+  ```
+  > you can even use the watch mode to test and debug your CI pipeline.
+
+  ## About variable interpolation
+
+  - https://docs.docker.com/reference/compose-file/interpolation/
+
+x-common-variables: &common-variables
+  # Define global variables for the CI pipeline  
+  GLOBAL_WASM_BUILD_MESSAGE: "☂️ Building Go wasm plugins"
+  GLOBAL_BINARY_BUILD_MESSAGE: "📦 Building Go binaries"
+
+services:
+
+  # Build the wasm file using tinygo
+  build-wasm-go-plugin:
+    image: tinygo/tinygo:0.39.0
+    environment:
+      <<: *common-variables
+      LOCAL_WASM_BUILD_MESSAGE: "🟣 Building the say_hello wasm plugin"
+
+    command: 
+    # ${ABOUT} and ${AUTHOR} are defined into the .env file
+    # they are automatically picked up by docker compose
+    # $${GLOBAL_WASM_BUILD_MESSAGE} is defined in the common variables section
+      - /bin/sh
+      - -c
+      - |  
+        go version
+        tinygo version
+        # Use double $$ to escape $ in docker compose command
+        echo "$${GLOBAL_WASM_BUILD_MESSAGE}"
+        echo "$${LOCAL_WASM_BUILD_MESSAGE}"
+        echo "✋ about: ${ABOUT}, by ${AUTHOR}"
+        cd /go-plugin
+        go mod download
+        tinygo build \
+          -scheduler=none \
+          --no-debug \
+          -o /build/plugin.wasm \
+          -target wasi main.go
+        echo "📦 plugin.wasm built at /build/plugin.wasm"
+      
+    volumes:
+      - ./plugins/go-plugin:/go-plugin
+      - ./build:/build
+
+  # Build the cracker runner binary
+  build-cracker-runner:
+    image: golang:1.24.0-alpine
+    environment:
+      TARGETOS: ${TARGETOS:-linux}
+      TARGETARCH: ${TARGETARCH:-arm64}
+    command:
+      - /bin/sh
+      - -c
+      - |  
+        echo "$${GLOBAL_BINARY_BUILD_MESSAGE}"
+        echo "📦 building cracker runner on $${TARGETOS}/$${TARGETARCH}"
+        cd /cracker-runner
+        go mod download
+        CGO_ENABLED=0 GOOS=$${TARGETOS} GOARCH=$${TARGETARCH} go build \
+          -ldflags="-s -w" \
+          -o /build/cracker-runner-$${TARGETOS}-$${TARGETARCH} main.go
+        
+        chmod +x /build/cracker-runner-$${TARGETOS}-$${TARGETARCH}
+        echo "📦 cracker runner built at /build/cracker-runner-$${TARGETOS}-$${TARGETARCH}"
+      
+    volumes:
+      - ./cracker-runner:/cracker-runner
+      - ./build:/build
+
+  # Deploy the function (locally) for testing
+  start-function-for-local-testing:
+    image: ubuntu:22.04
+    environment:
+      TARGETOS: ${TARGETOS:-linux}
+      TARGETARCH: ${TARGETARCH:-arm64}    
+    ports:
+      - 8081:8080 # Expose port 8081 on the host to access the function
+    volumes:
+      - ./build:/build      
+    command:       
+      - /bin/sh
+      - -c
+      - |  
+        echo "🚀 Starting the function locally on port 8080"
+        ./build/cracker-runner-$${TARGETOS}-$${TARGETARCH} \
+        ./build/plugin.wasm say_hello 8080
+        
+    depends_on:
+      build-wasm-go-plugin:
+        condition: service_completed_successfully
+      build-cracker-runner:
+        condition: service_completed_successfully
+
+  # Test the endpoint
+  test-local-endpoint:
+    image: curlimages/curl:latest
+    command: >
+      curl -X POST
+      http://start-function-for-local-testing:8080
+      -H 'content-type: text/plain; charset=utf-8'
+      -d '😄 Bob Morane'
+    depends_on:
+      start-function-for-local-testing:
+        condition: service_started
+
+  # Stress test the endpoint
+  stress-test:
+    image: ubuntu:22.04
+    command:  
+      - /bin/bash
+      - -c
+      - |  
+        apt-get update 
+        apt-get -y install hey
+        hey -n 1000 -c 10 -m POST -T "text/plain" -d "😄 Bob Morane" \
+        http://start-function-for-local-testing:8080 > \
+        /reports/hey.report.$$(date +%Y%m%d_%H%M%S).text
+
+    volumes:
+      - ./reports:/reports
+    depends_on:
+      start-function-for-local-testing:
+        condition: service_started
+      test-local-endpoint:
+        condition: service_completed_successfully
+
+
+  # Stop the function after testing
+  stop-function:
+    image: docker:cli
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command:
+      - /bin/sh
+      - -c
+      - |  
+        echo '🚦 Stopping container named cracker-start-function-for-local-testing-1...'
+        docker stop cracker-start-function-for-local-testing-1
+      
+    depends_on:
+      test-local-endpoint:
+        condition: service_completed_successfully
+      stress-test:
+        condition: service_completed_successfully
+
+  # Create a multi architecture image with the wasm file and the extism-runner
+  build-local-image:      
+    image: hello-wasm-function:${TAG}
+    environment:
+      - TAG=${TAG:-demo-from-ci}
+    build:
+      context: .
+      platforms:
+        - "linux/amd64"
+        - "linux/arm64"
+      dockerfile: Dockerfile
+      args:
+        GO_VERSION: 1.24.0
+        TINYGO_VERSION: 0.39.0
+        PLUGIN_PATH: /plugins/go-plugin
+        RUNNER_PATH: /cracker-runner
+    command: ["/cracker-runner"] # hack because I use a scratch image
+    depends_on: 
+      build-wasm-go-plugin:
+        condition: service_completed_successfully
+      build-cracker-runner:
+        condition: service_completed_successfully
+      stop-function:
+        condition: service_completed_successfully
+        
+  # Scan the image for vulnerabilities
+  image-vulnerability-scan:
+    image: docker/scout-cli
+    user: root  # Required to access Docker socket
+    environment:
+      # Your Docker Hub username
+      DOCKER_SCOUT_HUB_USER: ${DOCKER_HUB_USERNAME}
+      # Your Docker Hub Personal Access Token (PAT)
+      DOCKER_SCOUT_HUB_PASSWORD: ${DOCKER_HUB_PAT}
+      
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock  # Mount Docker socket
+      - ./reports:/reports
+    command: 
+      - cves
+      #- --exit-code 
+      - hello-wasm-function:${TAG}
+      - --format
+      - markdown
+      - --output
+      - /reports/cves.report.md
+
+    # `--exit-code`  generates exit code 2 if vulnerabilities are found
+    tty: true
+    depends_on:
+      build-local-image:
+        condition: service_completed_successfully
+  

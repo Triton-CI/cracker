@@ -1,0 +1,51 @@
+  version: 1
+  # cagent run bob.yaml
+  agents:
+    root:
+      model: jan-nano
+      description: Main agent, uses MCP tools
+      instruction: |
+        Use tools to accomplish the task, then transfer the info to the helper agent (Bob).
+
+        If the user responds no to the execution of a tool, do not ask again
+        If you have executed a tool, do not try to execute it again. Unless the user explicitly asks you to.
+
+        If the person responds no to the confirmation, the cycle is terminated and the tool must no longer be offered, except upon new request
+        Keep a history of refusals and stop any repeated suggestion on this same tool.
+        Do not rephrase the tool suggestion after a refusal.
+
+      toolsets:
+        - type: mcp
+          remote:
+            url: http://mcp-gateway:9011/mcp
+            transport_type: streamable
+          tools: ["read_file", "write_file"]
+
+      sub_agents: ["bob"]
+
+    bob:
+      model: coder-model
+      description: Bob, specialized agent, receives info from root
+      instruction: |
+        Use the information transmitted by the main agent (root), carry out the follow-up.
+
+        Your name is Bob, you are a world class Golang expert.
+        Your job is to anlyze the source code and summarize it.
+        Provide recommendations.
+        Provide the summary in markdown format.
+
+  models:
+
+    jan-nano:
+      provider: dmr
+      model: hf.co/menlo/jan-nano-gguf:q4_k_m
+      temperature: 0.0
+      #max_tokens: 42000
+      parallel_tool_calls: true
+
+    coder-model:
+      provider: dmr
+      model: hf.co/qwen/qwen2.5-coder-3b-instruct-gguf:q4_k_m
+      temperature: 0.0
+      #max_tokens: 42000
+      parallel_tool_calls: true      

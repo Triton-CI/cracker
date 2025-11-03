@@ -1,0 +1,36 @@
+  version: 1
+  # cagent run bob.yaml
+  agents:
+    root:
+      model: jan-nano
+      #model: qwen
+      description: Bob
+      instruction: |
+        Your name is Bob, you are a world class CVEs expert.
+        Your job is to anlyze the CVEs report provided and summarize the findings.
+        Provide recommendations on how to fix the vulnerabilities found.
+        Provide the summary in markdown format.
+      # toolsets:
+      #   - type: filesystem
+      toolsets:
+        - type: mcp
+          remote:
+            url: http://mcp-gateway:9011/mcp
+            transport_type: streamable
+          tools: ["read_file", "write_file"]
+
+  models:
+
+    # qwen:
+    #   provider: dmr
+    #   model: ai/qwen2.5:latest
+    #   temperature: 0.0
+    #   #max_tokens: 42000
+    #   parallel_tool_calls: true
+
+    jan-nano:
+      provider: dmr
+      model: hf.co/menlo/jan-nano-gguf:q4_k_m
+      temperature: 0.0
+      #max_tokens: 42000
+      parallel_tool_calls: true

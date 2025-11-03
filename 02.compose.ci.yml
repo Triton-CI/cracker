@@ -1,0 +1,81 @@
+# Compose CI pipeline
+x-documentation: >
+  # Compose CI:
+
+  ## Requirements
+
+  ## Start the CI pipeline
+
+  ```bash
+  docker compose -f 02.compose.ci.yml up --build
+  ```
+  > you can even use the watch mode to test and debug your CI pipeline.
+
+  ## About variable interpolation
+
+  - https://docs.docker.com/reference/compose-file/interpolation/
+
+x-common-variables: &common-variables
+  # Define global variables for the CI pipeline  
+  GLOBAL_WASM_BUILD_MESSAGE: "☂️ Building Go wasm plugins"
+  GLOBAL_BINARY_BUILD_MESSAGE: "📦 Building Go binaries"
+
+services:
+
+  # Build the wasm file using tinygo
+  build-wasm-go-plugin:
+    image: tinygo/tinygo:0.39.0
+    environment:
+      <<: *common-variables
+      LOCAL_WASM_BUILD_MESSAGE: "🟣 Building the say_hello wasm plugin"
+
+    command: 
+    # ${ABOUT} and ${AUTHOR} are defined into the .env file
+    # they are automatically picked up by docker compose
+    # $${GLOBAL_WASM_BUILD_MESSAGE} is defined in the common variables section
+      - /bin/sh
+      - -c
+      - |  
+        go version
+        tinygo version
+        # Use double $$ to escape $ in docker compose command
+        echo "$${GLOBAL_WASM_BUILD_MESSAGE}"
+        echo "$${LOCAL_WASM_BUILD_MESSAGE}"
+        echo "✋ about: ${ABOUT}, by ${AUTHOR}"
+        cd /go-plugin
+        go mod download
+        tinygo build \
+          -scheduler=none \
+          --no-debug \
+          -o /build/plugin.wasm \
+          -target wasi main.go
+        echo "📦 plugin.wasm built at /build/plugin.wasm"
+      
+    volumes:
+      - ./plugins/go-plugin:/go-plugin
+      - ./build:/build
+
+  # Build the cracker runner binary
+  build-cracker-runner:
+    image: golang:1.24.0-alpine
+    environment:
+      TARGETOS: ${TARGETOS:-darwin}
+      TARGETARCH: ${TARGETARCH:-arm64}
+    command:
+      - /bin/sh
+      - -c
+      - |  
+        echo "$${GLOBAL_BINARY_BUILD_MESSAGE}"
+        echo "📦 building cracker runner on $${TARGETOS}/$${TARGETARCH}"
+        cd /cracker-runner
+        go mod download
+        CGO_ENABLED=0 GOOS=$${TARGETOS} GOARCH=$${TARGETARCH} go build \
+          -ldflags="-s -w" \
+          -o /build/cracker-runner-$${TARGETOS}-$${TARGETARCH} main.go
+        
+        chmod +x /build/cracker-runner-$${TARGETOS}-$${TARGETARCH}
+        echo "📦 cracker runner built at /build/cracker-runner-$${TARGETOS}-$${TARGETARCH}"
+      
+    volumes:
+      - ./cracker-runner:/cracker-runner
+      - ./build:/build
