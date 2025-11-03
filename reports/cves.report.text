@@ -5,10 +5,10 @@
                     │               Analyzed Image                
 ────────────────────┼─────────────────────────────────────────────
   Target            │  hello-wasm-function:demo                   
-    digest          │  242d4d1cf219                               
+    digest          │  0aa87b908137                               
     platform        │ linux/arm64                                 
     provenance      │ git@github.com:Triton-CI/cracker.git        
-                    │  https://github.com/Triton-CI/cracker/blob/43a946b49a725bfd3d9df57ae4fac55ea9951b3a   
+                    │  https://github.com/Triton-CI/cracker/blob/40a86e683f7a7b2ed51c973af73cdc8a2e80736a   
     vulnerabilities │    1C     3H    10M     1L                  
     size            │ 4.1 MB                                      
     packages        │ 10                                          
