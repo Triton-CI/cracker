@@ -1,0 +1,28 @@
+{"Time":"2025-11-04T08:02:01.45657893Z","Action":"start","Package":"logic"}
+{"Time":"2025-11-04T08:02:01.458666221Z","Action":"run","Package":"logic","Test":"TestFormatGreeting"}
+{"Time":"2025-11-04T08:02:01.458700596Z","Action":"output","Package":"logic","Test":"TestFormatGreeting","Output":"=== RUN   TestFormatGreeting\n"}
+{"Time":"2025-11-04T08:02:01.458735888Z","Action":"run","Package":"logic","Test":"TestFormatGreeting/basic_input"}
+{"Time":"2025-11-04T08:02:01.458737471Z","Action":"output","Package":"logic","Test":"TestFormatGreeting/basic_input","Output":"=== RUN   TestFormatGreeting/basic_input\n"}
+{"Time":"2025-11-04T08:02:01.45874093Z","Action":"run","Package":"logic","Test":"TestFormatGreeting/empty_input"}
+{"Time":"2025-11-04T08:02:01.458742096Z","Action":"output","Package":"logic","Test":"TestFormatGreeting/empty_input","Output":"=== RUN   TestFormatGreeting/empty_input\n"}
+{"Time":"2025-11-04T08:02:01.458743638Z","Action":"run","Package":"logic","Test":"TestFormatGreeting/special_characters"}
+{"Time":"2025-11-04T08:02:01.458744721Z","Action":"output","Package":"logic","Test":"TestFormatGreeting/special_characters","Output":"=== RUN   TestFormatGreeting/special_characters\n"}
+{"Time":"2025-11-04T08:02:01.458746346Z","Action":"run","Package":"logic","Test":"TestFormatGreeting/long_input"}
+{"Time":"2025-11-04T08:02:01.458747388Z","Action":"output","Package":"logic","Test":"TestFormatGreeting/long_input","Output":"=== RUN   TestFormatGreeting/long_input\n"}
+{"Time":"2025-11-04T08:02:01.458748513Z","Action":"run","Package":"logic","Test":"TestFormatGreeting/unicode_input"}
+{"Time":"2025-11-04T08:02:01.458749555Z","Action":"output","Package":"logic","Test":"TestFormatGreeting/unicode_input","Output":"=== RUN   TestFormatGreeting/unicode_input\n"}
+{"Time":"2025-11-04T08:02:01.458752805Z","Action":"output","Package":"logic","Test":"TestFormatGreeting","Output":"--- PASS: TestFormatGreeting (0.00s)\n"}
+{"Time":"2025-11-04T08:02:01.458754763Z","Action":"output","Package":"logic","Test":"TestFormatGreeting/basic_input","Output":"    --- PASS: TestFormatGreeting/basic_input (0.00s)\n"}
+{"Time":"2025-11-04T08:02:01.45875618Z","Action":"pass","Package":"logic","Test":"TestFormatGreeting/basic_input","Elapsed":0}
+{"Time":"2025-11-04T08:02:01.458763971Z","Action":"output","Package":"logic","Test":"TestFormatGreeting/empty_input","Output":"    --- PASS: TestFormatGreeting/empty_input (0.00s)\n"}
+{"Time":"2025-11-04T08:02:01.458765471Z","Action":"pass","Package":"logic","Test":"TestFormatGreeting/empty_input","Elapsed":0}
+{"Time":"2025-11-04T08:02:01.458766596Z","Action":"output","Package":"logic","Test":"TestFormatGreeting/special_characters","Output":"    --- PASS: TestFormatGreeting/special_characters (0.00s)\n"}
+{"Time":"2025-11-04T08:02:01.458768596Z","Action":"pass","Package":"logic","Test":"TestFormatGreeting/special_characters","Elapsed":0}
+{"Time":"2025-11-04T08:02:01.458770055Z","Action":"output","Package":"logic","Test":"TestFormatGreeting/long_input","Output":"    --- PASS: TestFormatGreeting/long_input (0.00s)\n"}
+{"Time":"2025-11-04T08:02:01.45877143Z","Action":"pass","Package":"logic","Test":"TestFormatGreeting/long_input","Elapsed":0}
+{"Time":"2025-11-04T08:02:01.458772555Z","Action":"output","Package":"logic","Test":"TestFormatGreeting/unicode_input","Output":"    --- PASS: TestFormatGreeting/unicode_input (0.00s)\n"}
+{"Time":"2025-11-04T08:02:01.458773805Z","Action":"pass","Package":"logic","Test":"TestFormatGreeting/unicode_input","Elapsed":0}
+{"Time":"2025-11-04T08:02:01.458774805Z","Action":"pass","Package":"logic","Test":"TestFormatGreeting","Elapsed":0}
+{"Time":"2025-11-04T08:02:01.458775805Z","Action":"output","Package":"logic","Output":"PASS\n"}
+{"Time":"2025-11-04T08:02:01.459021721Z","Action":"output","Package":"logic","Output":"ok  \tlogic\t0.002s\n"}
+{"Time":"2025-11-04T08:02:01.459028888Z","Action":"pass","Package":"logic","Elapsed":0.002}

@@ -1,8 +1,8 @@
 {
     "workbench.iconTheme": "material-icon-theme",
     "workbench.colorTheme": "Idea intellij light theme",
-    "editor.fontSize": 16,
-    "terminal.integrated.fontSize": 16,
+    "editor.fontSize": 14,
+    "terminal.integrated.fontSize": 14,
     "editor.insertSpaces": true,
     "editor.tabSize": 4,
     "editor.detectIndentation": true,
@@ -24,33 +24,33 @@
             "other": "off"
         }
     },
-    "markdown.preview.fontSize": 16,
+    "markdown.preview.fontSize": 14,
     "workbench.editorAssociations": {
         "*.md": "vscode.markdown.preview.editor"
     },
     "[dockerfile]": {
-        "editor.fontSize": 16,
+        "editor.fontSize": 14,
     },
     "[dockercompose]": {
-        "editor.fontSize": 16,
+        "editor.fontSize": 14,
     },
     "[python]": {
-        "editor.fontSize": 16,
+        "editor.fontSize": 14,
 
     },
     "[json]": {
-        "editor.fontSize": 16,
+        "editor.fontSize": 14,
 
     },
     "[yaml]": {
-        "editor.fontSize": 16,
+        "editor.fontSize": 14,
 
     },
     "[go]": {
-        "editor.fontSize": 16,
+        "editor.fontSize": 14,
     },
     "[javascript]": {
-        "editor.fontSize": 16,
+        "editor.fontSize": 14,
     },
     "python.defaultInterpreterPath": "~/.venv/bin/python"
 }

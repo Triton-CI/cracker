@@ -5,18 +5,18 @@
                     │               Analyzed Image                
 ────────────────────┼─────────────────────────────────────────────
   Target            │  hello-wasm-function:demo                   
-    digest          │  0aa87b908137                               
+    digest          │  fd07b3b3ad52                               
     platform        │ linux/arm64                                 
     provenance      │ git@github.com:Triton-CI/cracker.git        
-                    │  https://github.com/Triton-CI/cracker/blob/40a86e683f7a7b2ed51c973af73cdc8a2e80736a   
-    vulnerabilities │    1C     3H    10M     1L                  
+                    │  https://github.com/Triton-CI/cracker/blob/b1084d6116fcc7fee52687b1e1ebd29431f70cfb   
+    vulnerabilities │    1C     5H     9M     0L                  
     size            │ 4.1 MB                                      
     packages        │ 10                                          
 
 
 ## Packages and Vulnerabilities
 
-   1C     3H    10M     1L  stdlib 1.24.0
+   1C     5H     9M     0L  stdlib 1.24.0
 pkg:golang/stdlib@1.24.0
 
     ✗ CRITICAL CVE-2025-22871
@@ -30,10 +30,20 @@ pkg:golang/stdlib@1.24.0
       Affected range : <1.24.8  
       Fixed version  : 1.24.8   
     
+    ✗ HIGH CVE-2025-61723
+      https://scout.docker.com/v/CVE-2025-61723?s=golang&n=stdlib&t=golang&vr=%3C1.24.8
+      Affected range : <1.24.8  
+      Fixed version  : 1.24.8   
+    
     ✗ HIGH CVE-2025-58188
       https://scout.docker.com/v/CVE-2025-58188?s=golang&n=stdlib&t=golang&vr=%3C1.24.8
       Affected range : <1.24.8  
       Fixed version  : 1.24.8   
+    
+    ✗ HIGH CVE-2025-58187
+      https://scout.docker.com/v/CVE-2025-58187?s=golang&n=stdlib&t=golang&vr=%3C1.24.9
+      Affected range : <1.24.9  
+      Fixed version  : 1.24.9   
     
     ✗ HIGH CVE-2025-22874
       https://scout.docker.com/v/CVE-2025-22874?s=golang&n=stdlib&t=golang&vr=%3E%3D1.24.0-0%2C%3C1.24.4
@@ -46,16 +56,6 @@ pkg:golang/stdlib@1.24.0
       Affected range : >=1.24.0-0  
                      : <1.24.4     
       Fixed version  : 1.24.4      
-    
-    ✗ MEDIUM CVE-2025-61723
-      https://scout.docker.com/v/CVE-2025-61723?s=golang&n=stdlib&t=golang&vr=%3C1.24.8
-      Affected range : <1.24.8  
-      Fixed version  : 1.24.8   
-    
-    ✗ MEDIUM CVE-2025-58187
-      https://scout.docker.com/v/CVE-2025-58187?s=golang&n=stdlib&t=golang&vr=%3C1.24.9
-      Affected range : <1.24.9  
-      Fixed version  : 1.24.9   
     
     ✗ MEDIUM CVE-2025-47906
       https://scout.docker.com/v/CVE-2025-47906?s=golang&n=stdlib&t=golang&vr=%3E%3D1.24.0%2C%3C1.24.6
@@ -94,7 +94,7 @@ pkg:golang/stdlib@1.24.0
       Affected range : <1.24.8  
       Fixed version  : 1.24.8   
     
-    ✗ LOW CVE-2025-58183
+    ✗ MEDIUM CVE-2025-58183
       https://scout.docker.com/v/CVE-2025-58183?s=golang&n=stdlib&t=golang&vr=%3C1.24.8
       Affected range : <1.24.8  
       Fixed version  : 1.24.8   
@@ -102,8 +102,8 @@ pkg:golang/stdlib@1.24.0
 
 
 15 vulnerabilities found in 1 package
-  CRITICAL  1   
-  HIGH      3   
-  MEDIUM    10  
-  LOW       1   
+  CRITICAL  1  
+  HIGH      5  
+  MEDIUM    9  
+  LOW       0  
 

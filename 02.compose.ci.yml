@@ -22,6 +22,58 @@ x-common-variables: &common-variables
 
 services:
 
+  # Run unit tests for the wasm plugin
+  test-wasm-go-plugin:
+    #image: tinygo/tinygo:0.39.0
+    image: golang:1.24.0-alpine
+    environment:
+      <<: *common-variables
+    command:
+      - /bin/sh
+      - -c
+      - |
+        echo "🧪 Running unit tests for wasm plugin"
+        cd /go-plugin/logic
+        go mod download
+        mkdir -p /reports
+        if go test -v -json > /reports/wasm-plugin-test-report.json; then
+          echo "✅ Wasm plugin tests completed"
+          echo "📄 Test report generated at /reports/wasm-plugin-test-report.json"
+          exit 0
+        else
+          echo "❌ Wasm plugin tests failed"
+          exit 1
+        fi
+
+    volumes:
+      - ./plugins/go-plugin:/go-plugin
+      - ./reports:/reports
+
+  # Run unit tests for the cracker runner
+  test-cracker-runner:
+    image: golang:1.24.0-alpine
+    command:
+      - /bin/sh
+      - -c
+      - |
+        echo "🧪 Running unit tests for cracker runner"
+        cd /cracker-runner
+        go mod download
+        mkdir -p /reports
+        if go test -v -json > /reports/cracker-runner-test-report.json; then
+          echo "✅ Cracker runner tests completed"
+          echo "📄 Test report generated at /reports/cracker-runner-test-report.json"
+          exit 0
+        else
+          echo "❌ Cracker runner tests failed"
+          exit 1
+        fi
+
+    volumes:
+      - ./cracker-runner:/cracker-runner
+      - ./reports:/reports
+
+
   # Build the wasm file using tinygo
   build-wasm-go-plugin:
     image: tinygo/tinygo:0.39.0
@@ -54,6 +106,9 @@ services:
     volumes:
       - ./plugins/go-plugin:/go-plugin
       - ./build:/build
+    depends_on:
+      test-wasm-go-plugin:
+        condition: service_completed_successfully
 
   # Build the cracker runner binary
   build-cracker-runner:
@@ -64,7 +119,7 @@ services:
     command:
       - /bin/sh
       - -c
-      - |  
+      - |
         echo "$${GLOBAL_BINARY_BUILD_MESSAGE}"
         echo "📦 building cracker runner on $${TARGETOS}/$${TARGETARCH}"
         cd /cracker-runner
@@ -72,10 +127,15 @@ services:
         CGO_ENABLED=0 GOOS=$${TARGETOS} GOARCH=$${TARGETARCH} go build \
           -ldflags="-s -w" \
           -o /build/cracker-runner-$${TARGETOS}-$${TARGETARCH} main.go
-        
+
         chmod +x /build/cracker-runner-$${TARGETOS}-$${TARGETARCH}
         echo "📦 cracker runner built at /build/cracker-runner-$${TARGETOS}-$${TARGETARCH}"
-      
+
     volumes:
       - ./cracker-runner:/cracker-runner
       - ./build:/build
+    depends_on:
+      test-cracker-runner:
+        condition: service_completed_successfully
+
+
